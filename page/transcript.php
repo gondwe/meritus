@@ -1,24 +1,30 @@
-
+<div class="mt-5">
 <?php
-include_once"functions.php";
+
+
+
+// include_once"functions.php";
 //$handle=fopen('school_merits/f2.csv','r');
-$path='school_merits/f2.csv';
 $start=time();
 
-function merit($path){
+function merit($adm=null){
+	$path=merit_uploads.'/f2.csv';
 	$merit = array_map('str_getcsv', file($path));
 	// while($row=fgetcsv($handle)){
 		// $merit[]=$row;
 	// }
+
+	if(empty($merit)) exit(alert("Upload has no data. Please re-upload!"));
+
 	$header=array_shift($merit);
 	$f=array();
 	foreach($merit as $k=>$v){
 		$f=array_combine($header,$v);
-		$id=array_shift($f);
+		$id=current($f);
 		$broad[$id]=$f;
 	}
-	return $broad;
-	
+	return is_null($adm)? $broad : $broad[$adm];
+	// pf($broad)
 }
 
 	function result($adm){
@@ -49,13 +55,36 @@ function merit($path){
 
 		}
 		else{
-			$html .=('That Admission Number was Not Found!');
+			alert('That Admission Number was Not Found!',1);
 		
 		}
 		return $html;
 	}
-	pf(result('sdd'));
+
+	function metris($adm=null){
+		$m = merit($adm);
+		$fields = array_keys(current($m));
+
+		echo "<table class='table-striped' width='100%'>";
+		echo "<thead>";echo "<tr>";foreach($fields as $f){ echo "<th>$f</th>";}echo "</tr>";echo "</thead>";
+		echo "<tbody >";
+			array_map(function($j){echo "<tr>";array_map(function($td){echo "<td>$td</td>";},$j);echo "</tr>";},$m);
+		echo "</tbody >";
+
+		echo "</table >";
+
+		// return $m;
+	}
+
+
+
+
+	pf(metris());
+
+
+
+	// pf(result(1234));
 	
 
-$t=$start-time();
+// $t=$start-time();
 ?>
