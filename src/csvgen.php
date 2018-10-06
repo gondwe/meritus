@@ -1,7 +1,7 @@
 <?php
 $data = explode(",",urldecode($_REQUEST["data"]));
 
-array_unshift($data,"NAMES");
+array_unshift($data,"NAME");
 array_unshift($data,"ADM");
 array_push($data,"MG");
 array_push($data,"POS");

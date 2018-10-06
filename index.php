@@ -10,12 +10,15 @@
     
 <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
 <link rel="stylesheet" href="./assets/css/font-awesome.min.css">
+<script src="./assets/js/jquery-3.3.1.min.js"></script>
 
 <body>
 <?php 
 
 
 require("src/config.php");
+require_once ("src/functions.php");
+require("src/auth.php");
 require("page/nav.php");
 require("page/$pagefile");
 
@@ -25,6 +28,5 @@ require("page/$pagefile");
 ?>
 </div>
 <small class="footer" style='bottom:0px; background:#fff; width:100%; position:fixed; color:#aaa;right:0px; padding:5px;text-align:center;' >Meritus &copy 2018 <a style='text-decoration:none; color:inherit' href='tel:0721554117'>+254 721554117</a></small>
-<script src="./assets/js/jquery-3.3.1.min.js"></script>
 <script src="./assets/js/bootstrap.min.js"></script>
 </html>

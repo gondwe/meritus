@@ -13,4 +13,4 @@ define("merit_uploads"	, 	"./data/merits/");
 define("site_url", "http://localhost/meritus");
 define("base_url", "/meritus");
 
-require_once ("functions.php");
+

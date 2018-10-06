@@ -13,6 +13,8 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#">Downloads</a>
+      </li> <li class="nav-item">
+        <a class="nav-link" href="index.php?pg=search">Search</a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
