@@ -3,88 +3,71 @@
 
 
 
-// include_once"functions.php";
-//$handle=fopen('school_merits/f2.csv','r');
-$start=time();
+	function merit($adm=null){
+		global $scode;
 
-function merit($adm=null){
-	$path=merit_uploads.'/f2.csv';
-	$merit = array_map('str_getcsv', file($path));
-	// while($row=fgetcsv($handle)){
-		// $merit[]=$row;
-	// }
-
-	if(empty($merit)) exit(alert("Upload has no data. Please re-upload!"));
-
-	$header=array_shift($merit);
-	$f=array();
-	foreach($merit as $k=>$v){
-		$f=array_combine($header,$v);
-		$id=current($f);
-		$broad[$id]=$f;
-	}
-	return is_null($adm)? $broad : $broad[$adm];
-	// pf($broad)
-}
-
-	function result($adm){
-		global $path;
-		$html='';
-		$broad=merit($path);
-		$adms[]=array_keys($broad);
-		if(in_array($adm,$adms[0])){
-		$res=$broad[$adm];
-		// pf($adms);
-			$name=array_shift($res);
-			$title='ADM NO: '.$adm.' NAME:'.$name;
-			$subj_titles=array_keys($res);
-			$html .='<table border="1">';
-		$html .='<tr><td colspan="'.count($subj_titles).'">'.$title.'</td></tr>';
-			$html .='<tr>';
-		foreach($res as $k=>$v){
-			$html .='<td>'.$k.'</td>';
-			}
-			$html .='</tr>';
-			$html .='<tr>';
-		foreach($res as $k=>$v){
-			$html .='<td>'.$v.'</td>';
-		}
-			$html .='</tr>';
-			$html .='</table>';
-			
-
-		}
-		else{
-			alert('That Admission Number was Not Found!',1);
+		// filter available uploads
+		$file = fetch("select file from uploads where month(date) = month(current_timestamp) and scode = '$scode' order by date desc limit 1");
 		
-		}
-		return $html;
+		if($file == "") exit(alert("No uploads found! Please download the Template and fill"));
+		$path=merit_uploads.$file;
+		$merit = array_map('str_getcsv', file($path));
+
+		if(empty($merit)) exit(alert("Upload has no data. Please re-upload!"));
+		$header[]=array_shift($merit);
+		$header = array_column(array_fill(0,count($merit),$header),0);
+		$broad = array_map("array_combine",$header,$merit);
+		foreach($broad as $m=>$k){ $data[current($k)] = $k;}
+		
+		return is_null($adm)? $data : $data[$adm];
 	}
 
-	function metris($adm=null){
+
+
+	function broad($adm=null){
+		
 		$m = merit($adm);
-		$fields = array_keys(current($m));
+		$adms = array_map(function($adm){
+			return preg_replace(' [\/] ','_',$adm);
+		}, array_keys($m));
 
+		// show a table
 		echo "<table class='table-striped' width='100%'>";
-		echo "<thead>";echo "<tr>";foreach($fields as $f){ echo "<th>$f</th>";}echo "</tr>";echo "</thead>";
-		echo "<tbody >";
+		echo "<thead>";echo "<tr>";foreach(array_keys(current($m)) as $f){ echo "<th>$f</th>";}echo "</tr>";echo "</thead><tbody >";
 			array_map(function($j){echo "<tr>";array_map(function($td){echo "<td>$td</td>";},$j);echo "</tr>";},$m);
-		echo "</tbody >";
+		echo "</tbody ></table ><hr>";
+		
+		// filter the qrcodes and display
+		echo 'Quick Response Codes';
+		echo '<hr>';
+		$f = scandir("src/codes");
+		$admap = array_fill(0,count($f),$adms);
+		$qrcodes = array_map(function($i){
+			global $scode;
+			echo '<div class="form-group pull-left text-center">';
+			echo "<img src='src/codes/$i' ><br>".preg_replace('/'.$scode.'_/','',$i);
+			echo "</div>";
+		}, array_filter(array_map(function($q){
+			global $scode; if( preg_match("/".$scode."_/",$q)) 
+			return $q;
+		},array_filter(array_map(function($i,$ap){
+			global $scode;
+			$j = str_replace(".png","",$i);$j = str_replace($scode."_","",$j);
+			return in_array($j,$ap)? $i: null;
+		},$f,$admap)))));
 
-		echo "</table >";
-
-		// return $m;
+		// pf($admap);
 	}
 
 
-
-
-	pf(metris());
-
-
-
-	// pf(result(1234));
+	// generate the qrcode
+	require("src/phpqrcode/qrlib.php");
+	foreach(merit() as $adm=>$v){
+		$adm = preg_replace(' [\/] ','_',$adm);
+		QRcode::png('http://nardtec.net/meritus/student/'.$scode."_".($adm), 'src/codes/'.$scode."_".($adm).'.png');
+	}
 	
+	echo(broad());
 
-// $t=$start-time();
+
 ?>

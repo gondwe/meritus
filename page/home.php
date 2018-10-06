@@ -1,25 +1,24 @@
-<p>INSTRUCTIONS</p>
-<ol>
-  <li><code>Download the csv template.</li></code>
-  <li><code>Edit & Save.</li></code>
-  <li><code>Upload the save file back to prepeare report data.</li></code>
-</ol>
-<hr>
+<div class="m-4">
+  <h6>Checkout <a href="index.php?pg=features">FAQ</a> for more info</h6>
+</div>
 
 <?php 
   if(isset($_FILES["merit"])){
-
-    $file = upload("merit");
-    $current = fetch("select id from uploads where date(date) = date(current_timestamp)");
     
-    if(empty($current)){
-      $sql = "insert into uploads (scode, file) values('$scode', '$file')";
-    }else{
-      $records = @array_pop(get("select id, file from uploads where date(date) = date(current_timestamp)"));
-      unlink(merit_uploads.end($records));
-      $sql = "update uploads set file = '$file' where id = '".$records->id."'";
+    $file = upload("merit");
+    if($file !== ""){
+      $current = fetch("select id from uploads where date(date) = date(current_timestamp)");
+      if(empty($current)){
+        $sql = "insert into uploads (scode, file) values('$scode', '$file')";
+        if(process($sql)) alert("Upload Successful");
+      }else{
+        $records = @array_pop(get("select id, file from uploads where date(date) = date(current_timestamp)"));
+        @unlink(merit_uploads.end($records));
+        $sql = "update uploads set file = '$file' where id = '".$records->id."'";
+        if(process($sql)) alert("Upload Successful");
+      }
     }
-    if(process($sql)) alert("Upload Successful");
+    
   }
 ?>
 

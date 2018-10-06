@@ -5,14 +5,14 @@
 
 if(!empty($_POST)){
     $p = $_POST["subs"];
-    pf($p);
+    // pf($p);
     $ss = implode(",",array_keys($p));
-    pf($ss);
+    // pf($ss);
     $current = fetch("select id from selections where month(date) = month(current_timestamp)");
     $sql = ($current) ? "update selections set subjectlist = '$ss' where id = '$current'" : "insert into selections (scode, subjectlist) values($scode,'$ss')";
     // pf($sql);
     process($sql);
-    $data = urlencode($ss);
+    $data = urlencode(implode(",",$p));
     // pf($data);
     header("location:./src/csvgen.php?data=$data");
 }
@@ -46,6 +46,7 @@ array_map(function($sub){
 
 <style>
     label {margin:5px}
+	input {display:contents}
 </style>
 
 <script>

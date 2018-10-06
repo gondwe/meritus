@@ -9,14 +9,14 @@
     <ul class="navbar-nav">
    
       <li class="nav-item">
-        <a class="nav-link" href="#">Features</a>
+        <a class="nav-link" href="index.php?pg=features">FAQ</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Pricing</a>
+        <a class="nav-link" href="#">Downloads</a>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-          Products
+        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          Other Products
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" href="#">Exams MIS</a>
@@ -26,6 +26,10 @@
       </li>
     </ul>
   </div>
+    <form class="form-inline my-2 my-lg-0">
+      <!-- <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"> -->
+      <a href="#logout" class="btn btn-squared text-light mr-2"><i class='fa fa-sign-out'></i> Logout</a>
+    </form>
 </nav>
 
-<div class="container">
+<div class="container" style="margin-bottom:15%" >

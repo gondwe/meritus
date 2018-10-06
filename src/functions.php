@@ -25,20 +25,19 @@ $scode = "1";
 function upload($fldname, $trailer = ""){
 	global $scode; ; 
 	$name =$_FILES[$fldname]['name'];
+	if($_FILES[$fldname]['size'] > 2000 ) {  alert("File Too Large !"); return ""; }
 	$esx = explode(".",$name);
 	$extension = strtolower(end($esx));
 	if($extension == 'csv'){	
 	if(move_uploaded_file($_FILES[$fldname]['tmp_name'],merit_uploads.$name)){
 		$trailer = (microtime(1)*10000)."_".$scode.".".$extension; rename(merit_uploads.$name, merit_uploads.$trailer);	
 	}
-	else{pf("uploading to ".merit_uploads.$name." failed. try again");
-	}}else{pf("not a valid csv file"); }
+	else{alert("uploading to ".merit_uploads.$name." failed. try again",2);
+	}}else{alert("not a valid csv file",2); }
 	return $trailer;
 }
 
 
-function alert($i,$j=null){
-	echo("<h6 class='alert alert-".($j? 'danger':'success')."'>$i</h6>");
-}
+function alert($i,$j=null){ echo("<h6 class='alert alert-".($j? 'danger':'success')."'>$i</h6>"); }
 
 ?>
